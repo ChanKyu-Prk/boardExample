@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="alwaysUseFullPath" value="true"></property>
+		<property name="mappings">
+			<props>
+				<prop key="/board_list.do">boardListController</prop>
+			</props>
+		</property>
+		<property name="order" value="1"></property>
+	</bean>
+
+
+	
+	<bean
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+		<property name="order" value="3"></property>
+	</bean>
+
+
+<!-- mvc 어노테이션 네임스페이스로 함/ 아래꺼는 옛날방식 (어노테이션을 쓰겠다라는 객체생성) -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="order" value="2"></property>
+	</bean>
+
+	<bean id="boardListController"
+		class="board.controller.BoardListController">
+		<property name="boardDao" ref="boardDao" />
+	</bean>
+
+	<bean id="/board_detail.do"
+		class="board.controller.BoardDetailController">
+		<property name="boardDao" ref="boardDao" />
+	</bean>
+
+
+	<bean class="board.controller.BoardInsertFormController">
+		<property name="boardDao" ref="boardDao" />
+	</bean>
+
+	<bean class="board.controller.BoardUpdateFormController">
+		<property name="boardDao" ref="boardDao" />
+	</bean>
+
+	<bean class="board.controller.BoardDeleteFormController">
+		<property name="boardDao" ref="boardDao" />
+	</bean>
+
+
+	<bean id="boardDao" class="board.dao.BoardDaoImpl">
+		<property name="jdbcTemplate" ref="springJdbcTemplate" />
+	</bean>
+
+	<bean id="springJdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+		<property name="order">
+			<value>2</value>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename">
+			<value>BundleView</value>
+		</property>
+		<property name="order">
+			<value>1</value>
+		</property>
+	</bean>
+
+</beans>
